@@ -1,9 +1,13 @@
 import React from 'react'
 import {Loading} from './Loading'
+
+const SECURITY_CODE = "paradigma";
+
 class ClassUseState extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            value:"",
             error:false,
             loading:false
         }
@@ -16,7 +20,14 @@ class ClassUseState extends React.Component {
         if(this.state.loading){
             setTimeout(()=>{
                 console.log('dentro del backend')
-                this.setState({loading:false});
+                if(SECURITY_CODE === this.state.value)
+                    this.setState({loading:false});
+                else
+                    this.setState({
+                        error:true,
+                        loading:false})
+
+                
                 console.log('termina cambio en el backend')
             },2000)
         console.log('termina did update')
@@ -31,11 +42,14 @@ class ClassUseState extends React.Component {
         <div>
             <h2>Delete Class state</h2>
             <p>please, write the security code</p>
-            {!this.state.error && <p>Error: no funcion</p>}
+            {this.state.error && !this.state.loading && <p>Error: no funcion</p>}
             {this.state.loading && <Loading/>}
 
             
-            <input placeholder="codigo de seguridad" />
+            <input
+            value={this.state.value}
+            onChange={(e) => {this.setState({value: e.target.value})} }
+            placeholder="codigo de seguridad" />
             <button
             onClick={() => this.setState(prevState => ({loading : !prevState.loading }))}
             > Check!</button>
