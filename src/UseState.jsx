@@ -4,13 +4,29 @@ const SECURITY_CODE = "paradigma";
 
 function UseState() {
     const[state,setState] = React.useState({
-        value:"",
-        error:false,
-        loading:false,
-        deleted:false,
-        confirmed:false
+        
     });
 
+    const onCheck = () =>{
+        setState({...state,loading: true})
+    }
+    const onConfirm = () =>{
+        setState({...state,loading:false,error:false,confirmed:true})
+    }
+    const onError =() =>{
+        setState({...state,loading:false,error:true})
+    }
+    const onWrite = (newValue)=>{
+        setState({
+            ...state,
+            value:newValue})
+    }
+    const onReset = () =>{
+        setState({...state,deleted:false,confirmed:false,value:''})
+    }
+    const onDelete = () =>{
+        setState({...state,deleted: true})
+    }
     console.log(state)
 
     React.useEffect(()=>{
@@ -22,9 +38,9 @@ function UseState() {
                // console.log('dentro del backend')
 
                 if(state.value !== SECURITY_CODE)
-                    setState({...state,loading:false,error:true})
+                    onError();
                 else{
-                    setState({...state,loading:false,error:false,confirmed:true})
+                    onConfirm();
                 } 
                 
                // console.log('termina cambio en el backend')
@@ -48,14 +64,11 @@ function UseState() {
                 placeholder = "codigo de seguridad"
                 value={state.value} 
                 onChange={(e) => {
-                    setState({
-                        ...state,
-                        value:e.target.value});
-        
+                    onWrite(e.target.value);
                 }}
                 />
                 <button
-                onClick={() => {setState({...state,loading: true})}}
+                onClick={() => {onCheck()}}
                 > Check!</button>
                 </div>
                 );
@@ -64,10 +77,10 @@ function UseState() {
         <>
             <p>Are you sure you want to delete state?</p>
             <button  
-            onClick={()=> setState({...state,deleted: true})}
+            onClick={()=> {onDelete()}}
             type="button"> yes, delete </button>
             <button 
-            onClick={()=> setState({...state,confirmed:false,value:''})}
+            onClick={()=> {onReset()}}
             
             type="button">No</button>
         </>
@@ -77,7 +90,7 @@ function UseState() {
             <>
             <p>Deleted</p>
             <button
-                onClick={()=> setState({...state,deleted:false,confirmed:false,value:''})}
+                onClick={()=> {onReset()}}
             >Recover state</button>
             </>
         )

@@ -1,11 +1,11 @@
 import './App.css';
-import {UseState} from './UseState'
+import {UseReducer} from './UseReducer'
 import {ClassUseState} from './ClassUseState'
 
 function App() {
   return (
     <div className="App">
-      <UseState/>
+      <UseReducer/>
       <ClassUseState/>
     </div>
      
